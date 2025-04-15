@@ -1,0 +1,38 @@
+{% extends 'BudgetApp/base.html' %}
+
+{% block title %}
+Welcome
+{% endblock %}
+
+{% block content %}
+<style>
+    body{
+        background-color: rgb(71, 71, 237);
+        height: 100vh;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        justify-content: center;
+    }
+    h1{
+        font-family: sans-serif;
+        font-size: 40px;
+    }
+    a{
+        text-decoration: none;
+        width: 70px;
+        height: 35px;
+        background-color: aqua;
+        color: black;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-family: sans-serif;
+    }
+    a:hover{
+        background-color: rgb(15, 188, 188);
+    }
+</style>
+<h1>Welcome My Budget App</h1>
+<a href="{% url 'main' %}">Goo</a>
+{% endblock %}

@@ -1,0 +1,161 @@
+{% extends 'BudgetApp/base.html' %}
+
+{% block title %}
+Expenses
+{% endblock %}
+
+{% block content %}
+<script>
+        document.addEventListener('DOMContentLoaded', function () {
+        const addBtn = document.getElementById('addExpense');
+        const incomeList = document.getElementById('expenseList');
+        const amountInput = document.getElementById('expenseAmount');
+        const typeInput = document.getElementById('expenseType');
+        let incomeData = JSON.parse(localStorage.getItem('expenseData')) || [];
+
+        function render() {
+            incomeList.innerHTML = '';
+            incomeData.forEach(item => {
+                const li = document.createElement('li');
+                li.id = item.id;
+                li.innerHTML = `Money: ${item.amount} From: ${item.income_type} <i class="fa-solid fa-trash"></i>`;
+                incomeList.appendChild(li);
+            });
+            const total = incomeData.reduce((sum, item) => sum + Number(item.amount), 0);
+            document.getElementById('p1').textContent = 'All Expenses: ' + total;
+            localStorage.setItem('expense', total);
+        }
+
+        incomeList.addEventListener('click', e => {
+            if (e.target.classList.contains('fa-trash')) {
+                const id = e.target.parentElement.id;
+                incomeData = incomeData.filter(i => i.id !== id);
+                localStorage.setItem('expenseData', JSON.stringify(incomeData));
+                render();
+            }
+        });
+
+        addBtn.addEventListener('click', function (e) {
+            e.preventDefault();
+            const amount = amountInput.value;
+            const type = typeInput.value;
+            if (amount && type) {
+                const newItem = { id: Date.now().toString(), amount, income_type: type };
+                incomeData.push(newItem);
+                localStorage.setItem('expenseData', JSON.stringify(incomeData));
+                render();
+                amountInput.value = '';
+                typeInput.value = '';
+            }
+        });
+
+        render();
+    });
+</script>
+<style>
+    body {
+        height: 100%;
+        background-color: rgb(71, 71, 237);
+    }
+
+    a {
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        border-radius: 100%;
+        background-color: none;
+        margin: 5px;
+        width: 40px;
+        height: 40px;
+        text-decoration: none;
+        color: black;
+    }
+
+    a:hover {
+        transition: 0.8s;
+        background-color: rgb(145, 142, 142);
+    }
+
+    a i {
+        font-size: 30px;
+    }
+
+    main {
+        height: 100vh;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+    }
+
+    .box {
+        width: 300px;
+        height: 500px;
+        background-color: rgb(255, 255, 255);
+        border-radius: 20px;
+        padding: 10px;
+        display: flex;
+        flex-direction: column;
+        gap: 10px;
+    }
+
+    .fa-trash {
+        cursor: pointer;
+        color: red;
+    }
+
+    ul {
+        list-style: none;
+        padding: 0;
+        margin-top: 20px;
+    }
+
+    li {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        padding: 5px 0;
+        font-family: sans-serif;
+    }
+
+    #p1 {
+        font-family: sans-serif;
+    }
+
+    #addExpense {
+        cursor: pointer;
+        border: none;
+        background-color: blue;
+        padding: 7px 12px;
+        width: 50px;
+    }
+
+    input {
+        outline: none;
+        padding: 7px 3px;
+    }
+
+    select {
+        padding: 7px 0px 7px 0px;
+    }
+
+    #addExpense:hover {
+        background-color: rgb(19, 19, 201);
+    }
+</style>
+<a href="javascript:history.back()"><i class="fas fa-arrow-left"></i></a>
+<main>
+    <div class="box">
+        <div class="input">
+            <input type="number" id="expenseAmount">
+            <select name="" id="expenseType">
+                <option value="Adventure">Adventure</option>
+                <option value="Food">Food</option>
+                <option value="Clothes">Clothes</option>
+            </select>
+        </div>
+        <button type="submit" id="addExpense">Add</button>
+        <ul id="expenseList"></ul>
+        <p id="p1"></p>
+    </div>
+</main>
+{% endblock %}
